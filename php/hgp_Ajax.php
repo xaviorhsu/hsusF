@@ -4,7 +4,7 @@ header("Content-Type: text/html; charset=utf-8");
 if (!isset($_SESSION)) {  @session_start(); }
               switch ($_SERVER['HTTP_ORIGIN']) {
                   //case 'http://pro.sppp.com':
-                  case 'http://vm6hsu.myweb.hinet.net':
+                  case 'https://xaviorhsu.github.io/':
                         header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
                         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
                         header('Access-Control-Max-Age: 1000');

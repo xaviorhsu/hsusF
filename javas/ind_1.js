@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------------------------  
-  //websrv.local.tw      //vm6hsu.myweb.hinet.net  //var HTTP_IP="www.catholic.org.tw/tncath/";
-  var HTTP_IP=(location.hostname=="vm6hsu.myweb.hinet.net")?"tncath.catholic.org.tw/":location.hostname+"/hsusF/";
+  //websrv.local.tw      //xaviorhsu.github.io/  //var HTTP_IP="tncath.catholic.org.tw/tncath/";
+  var HTTP_IP=(location.hostname=="websrv.local.tw")?'http://websrv.local.tw/hsusF/':'https://tncath.catholic.org.tw/';
   var nophp  =(location.hostname=="websrv.local.tw")?0:0;
   var flag   =0; 
 //-----------------------------------------------------------------------------------------------  

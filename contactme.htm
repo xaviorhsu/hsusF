@@ -119,7 +119,7 @@ function upload(id){
   var upfile   = $("#"+id)[0].files[0];                            // Get the selected files from the input.
   var formData = new FormData();                                   // Create a FormData (instance) object.
   formData.append(id,upfile);    //alert(formData);                // Add the file to the request. The form with the file inputs.
-  var url     = "http://"+HTTP_IP+"php/hgp_Ajax.php?opt=upl_fil&fn="+id;               //no padding (use callback())
+  var url     = HTTP_IP+"php/hgp_Ajax.php?opt=upl_fil&fn="+id;               //no padding (use callback())
           $('#fmsg1').show();$('#fmsg0').hide();
           //callAjaxDo("fmsg1","f",url,formData);
           callAjaxDo("fmsg1","u",url,formData);

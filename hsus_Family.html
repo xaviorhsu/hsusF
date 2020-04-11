@@ -41,16 +41,12 @@
 #menu9 li:hover {cursor: pointer; background-color: pink; }
 #menu9 li a:active,#menu9 li a:hover {text-decoration: underline;color: #003333;background-color: #CCFFFF; border: solid 2px purple; box-shadow:8px -8px 8px gray; }
 </style>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<script type="text/javascript">
-try{var h_frames=window.top.document.getElementsByTagName("frameset");var h_frames_num=h_frames.length;
-        for(var i=0;i<h_frames_num;i++){if(h_frames[i].id.indexOf("MywebFrameSet")!=-1){h_frames[i].cols = "*, 0";}}}
-catch(e){}
-$(parent.document.getElementById("adpage")).remove();
-</script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
 <script type="text/javascript" src="javas/hsusF_JS.js" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-  var HTTP_IP=(location.hostname=="vm6hsu.myweb.hinet.net")?"tncath.catholic.org.tw/":location.hostname+"/hsusF/";
+/* websrv.local.tw/                 xaviorhsu.github.io/ */
+  var HTTP_IP=(location.hostname=="websrv.local.tw")?'http://websrv.local.tw/hsusF/':'https://tncath.catholic.org.tw/';
   var nophp=0; var flag=1;
 $(document).ready(function()  {
 $('#li_0,#li_1,#li_2,#li_3,#li_4').click(function() {
@@ -121,4 +117,3 @@ $('#li_0,#li_1,#li_2,#li_3,#li_4').click(function() {
 </body>
 </html>
 <!-- =====end============================================================================================= -->
-<noscript>
