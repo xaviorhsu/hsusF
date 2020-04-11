@@ -1,0 +1,53 @@
+header, footer, nav, article, aside, hgroup, section {  /* ?? block ?? */
+  display: block;
+}
+
+body {
+  margin:0 auto; color:#FFFFFF; overflow:scroll;
+}
+/* ------------------------------------------------,#tr01 input :hover------------ ------------------ */
+/* #th01, #tr02, #tf01 { display:none; }*/
+#tr01 input[type*=reset]:hover, #tr01 input[type*=button]:hover { cursor:pointer; color:green; background:#DDFFAA; }
+
+#tr02 fieldset.fs2  { color: darkgreen; background-color: gold;}
+#tr02 fieldset.fs2 a.dropt:link,  #tr02 fieldset.fs2 a.dropt:visited, #tr02 fieldset.fs2 a.drop:link,  #tr02 fieldset.fs2 a.drop:visited
+                    { color: darkgreen; text-decoration: none;}
+#tr02 fieldset.fs2 a.dropt:hover, #tr02 fieldset.fs2 a.dropt:active,  #tr02 fieldset.fs2 a.drop:hover, #tr02 fieldset.fs2 a.drop:active
+                    { cursor:pointer; color:red; background:#CCFFFF; text-decoration:underline; }
+
+#tr02 fieldset.fs4  { color: blue; background-color: gold;}
+#tr02 fieldset.fs4 a.dropt:link,  #tr02 fieldset.fs4 a.dropt:visited, #tr02 fieldset.fs4 a.drop:link,  #tr02 fieldset.fs4 a.drop:visited
+                    { color: blue; text-decoration: none;}
+#tr02 fieldset.fs4 a.dropt:hover, #tr02 fieldset.fs4 a.dropt:active,  #tr02 fieldset.fs4 a.drop:hover, #tr02 fieldset.fs4 a.drop:active
+                    { cursor:pointer; color:red; background:#CCFFFF; text-decoration:underline; }
+
+#tr02 fieldset.fs34 { color: darkred; background-color: pink;}
+#tr02 fieldset.fs34 a.dropt:link, #tr02 fieldset.fs34 a.dropt:visited,#tr02 fieldset.fs34 a.drop:link, #tr02 fieldset.fs34 a.drop:visited
+                    { color: darkred; text-decoration: none;}
+#tr02 fieldset.fs34 a.dropt:hover,#tr02 fieldset.fs34 a.dropt:active, #tr02 fieldset.fs34 a.drop:hover,#tr02 fieldset.fs34 a.drop:active
+                    { cursor:pointer; color:red; background:#CCFFFF; text-decoration:underline; }
+
+#tr02 legend.dropt:hover, #tr02 legend.dropt:active
+                    { cursor:pointer; color:red; background:#CCFFFF; text-decoration:underline; }
+#tr02 img { width:430px; height:300px; border:2px solid red; }
+#tr02 img.aa { width:300px; height:430px; border:2px solid red; }
+#log_ok a { text-decoration:none; }
+#log_ok a:hover { color:red; background:#BBEEFF; }
+table tr td input[type="button"] {color:darkred;font-size:16px;font-family:º–∑¢≈È;font-weight:bold;background-color:pink;}
+table tr td input[type="button"]:hover 
+	{  color:darkblue; background-color:gold; cursor:pointer; border: solid 2px darkblue; box-shadow:5px 5px 5px gray; }
+/* -------------------------------------------------------------------------- */                   
+a.dropt span       { display:none; position:absolute; padding:3px 3px 3px 3px; width:20%; font-size:18px;
+                     text-align:center; border:solid 4px purple; z-index:-5; }
+a.dropt:hover span { display:block; background:#ffffcc; color: darkgreen; z-index:5; margin:-7% 0 0 -20%;
+                   }
+
+legend.dropt span,a.drop span
+                   { display:none; position:fixed; padding:3px 3px 3px 3px; font-size:18px; text-align:center;
+                     border:solid 4px purple; z-index:-5; }
+legend.dropt:hover span,a.drop:hover span
+                   { display:block; background:#ffffcc; color: darkgreen; z-index:5; top:6%; left:3.5%;
+                   }
+div.imgsw span img      { display:none; position:fixed; width:860px; height:450px; border:4px solid darkblue; z-index:-5; }
+div.imgsw:hover span img{ display:block; z-index:5; top:5%; left:12%; box-shadow:10px 10px 10px brown; }
+/* ---------------------------------------------------------------------------- */

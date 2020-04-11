@@ -1,0 +1,578 @@
+<!-- --------------------------------------------------------------------------------------------------- -->
+<style type="text/css">
+#apDiv1 {
+  display:none;
+  top:5%;  right:11%;
+  position:fixed;
+	width:705px;	height:450px;
+	background-color:#000;
+	padding:25px;
+	border:5px double #CF0;
+  z-index:5;  
+}
+#apDiv2 {
+  display:none;
+  top:10%;  right:11%;
+  position:fixed;
+	width:655px;	height:405px;
+	background-color:#000;
+	padding:25px;
+	border:5px double #FF8080;
+  z-index:6;  
+}
+.Fbg_16    {font-size: 16px; font-family:"標楷體", Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #004000;}
+.Fbg16    {font-size: 16px; font-family:"標楷體", Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: yellow;}
+.Fbg18    {font-size: 18px; font-family:"標楷體", Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: purple; background-color: #99FFFF;}
+.pdata    {color: #99FFFF; background-color: red ;}
+.red18    {font-size: 18px; font-family:"標楷體", Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: red;}
+.cospic, .cosp2   {display:none;}
+</style>
+<script type="text/javascript" src="http://www.youtube.com/player_api"></script>
+<script type="text/javascript" charset="utf-8">
+//-----------------------------------------------------------------------------------------------
+var date=show_today(); $("#dats").text("製表日："+date[0]+"/"+date[2]+"/"+date[3]); $("#log_ok").html("　　");
+if (flag) { show_handle('#tr01','#th01,#tr02,#tf01'); }
+else      { show_handle('#th01,#tr02,#tf01','#tr01'); }
+  
+  $('#tr02 a').click(function() {
+    $("#tr02 a").css({"color":"","background-color":"","border":""});
+    $(this).css({"color":"darkred",'background-color':'#FFEEEE','border':'1px solid darkred'});
+  });  
+  
+function clears()        { $("#log_msg").html("　　"); $("#tr01 form input").val("");
+                           $('#xname').removeClass('pdata'); $('#xpass').removeClass('pdata'); }
+function show_handle(H,S)   { $(H).hide(); $(S).show(); }
+function data_handle(n)   {
+  //$("#sn").html(n?$("#nam2").val():"　　"); $("#sr").html(n?$("#rank").val():"　　"); $("#st").html(n?$("#tt").val():"　　");
+  var maps=["","#cellphone","#telephone","#cellphon2","#email","#emai2"];　
+  $(':checkbox:checked').each(function(i) {                                                             //alert(i+"<=>"+$(this).val());
+              if(n) $("#s"+$(this).val()).html($(maps[$(this).val()]).val());
+              else  $("#s"+$(this).val()).html("　");
+             });
+}
+function memchk(id)      {  
+  $("#"+id).html("　　"); //empty content
+  if(confirm("確定送出？"))
+    {
+      var items=["xname","xpass"];
+      var result=chk_form("0",items);
+      if(result) {
+        $('#mLomg').val(result);  saveStorage_S('mLomg');
+        if(id=="log_msg") {
+              var act_name=$('#name').val(); var pass=$('#pass').val();
+              //var act_pws= calcMD5(pass.substr(2,4));                                               alert(act_pws);
+              //var options = "opt=act_chk"+result.substr(2,result.length-3);                         alert(options);
+              var options = "opt=act_chk"+"&"+$("#form1").serialize();                              //alert(options);
+          if (nophp) {
+              act_pws=pass.substr(2,4);
+              info ="0,【輸入帳密錯誤】";
+              var date=show_today();
+              if(pass.length==8&&pass.substr(0,2)==date[2]&&pass.substr(6)==date[3])
+                    {
+                      var actpws=act_pws+act_name;
+                      result=chk_act_pws(actpws);
+                      if (result) info = "1,"+result;
+                    }
+              setoutmsg(id,info);
+               } 
+          else {  //var url = "http://"+HTTP_IP+"php/hgp_Ajax.php";
+                  var url = "http://"+HTTP_IP+"php/hgp_Ajax.php?js_cb=?";
+                  callAjaxDo(id,'s',url,options);
+               }               
+        }       
+      }
+    }
+}
+var audo=document.getElementById("ado"); var current_muc=Math.floor(Math.random()*2);
+$("#ado").attr("src","others/mix"+current_muc+".mp3"); $("#ado").prop("volume","0.5");
+
+var player=new Array();
+//function onYouTubePlayerAPIReady() { player=document.getElementById("u1bsw"); }
+function onYouTubeIframeAPIReady() { player[1]=new YT.Player("u1bsw"); player[2]=new YT.Player("u2bsw"); }
+if(window.opera){	addEventListener('load', onYouTubeIframeAPIReady(), false); }
+
+var playbi; var prevm="0";
+function bt1clk(A) {
+  var no=$(A).attr("id").substr(2,1); var time=$(A).attr("id").substring(4);
+  if($('#apDiv1 iframe:not(:eq('+(parseInt(no)-1)+'))').is(":visible"))
+        { playbi.pauseVideo();  $('#'+$('#apDiv1 iframe:not(:eq('+(parseInt(no)-1)+'))').attr("id")).hide('slow');}
+  playbi=player[no];
+  if ($(A).val()=="隱藏播放")  {
+            $(A).css({'color':'darkred','background-color':'pink'}).val(time); playbi.pauseVideo();
+            $('#u'+no+'bsw,#apDiv1').hide('slow'); if(audo.paused) audo.play();
+          }
+  else    { if(prevm!="0") $(prevm).css({'color':'darkred','background-color':'pink'}).val($(prevm).attr("id").substring(4));  prevm = A;
+            $('#apDiv1,#u'+no+'bsw').show('slow'); $(A).css({'color':'darkblue','background-color':'#BBEEFF'}).val("隱藏播放"); 
+            if(playbi) { if(typeof playbi.playVideo == 'function') { playbi.playVideo(); if(audo.played) audo.pause(); }  }
+          }
+}
+
+var tn,Fno,fodr;  var curpno=1; var pretm="0";
+function popup(A,Fn) {
+    if ($(A).val()=="隱藏顯示")  {
+            clearInterval(tn);  $(A).css({'color':'darkred','background-color':'pink'}).val($(A).attr("id").substring(4));
+            $("#tf01 tr:eq(0) td:eq(0) img").attr("src",""); $('#pic1,#apDiv2').hide('slow'); }
+    else  { if(pretm!="0") $(pretm).css({'color':'darkred','background-color':'pink'}).val($(pretm).attr("id").substring(4));
+            clearInterval(tn); fodr=$(A).attr("id").substr(4,4); Fno = Fn; curpno=(curpno>Fn)?1:curpno;
+            $('#pic1').attr("src","../hsusF/photo/"+fodr+"/x"+curpno+".jpg");  pretm = A;
+            $(A).css({'color':'darkblue','background-color':'#BBEEFF'}).val("隱藏顯示");
+            $('#apDiv2,#pic1').show('slow');  t=setInterval(mytime,4500); tn=t; }
+ }
+
+var SorH2=false;
+function bt2clk() {
+  $('#divFT').fadeToggle('slow',function() {
+    $("#bt2").val(SorH2?"取消聯絡":"與我聯絡");
+    if(!SorH2) {  $("#item").children().each(function(){
+                  $("#bt2").css({'color':'darkred','background-color':'pink'});
+                  if ($(this).val()=="1") $(this).attr("selected", true);
+                  else $(this).attr("selected", false);});    
+                  $('#photos,#tt').val('');$('#fmsg1').html('');show_handle('#fmsg1','#fmsg0');show_handle('.cospic','.cosptt');$('.cossub').show(); }
+    else       {  $("#bt2").css({'color':'darkblue','background-color':'#BBEEFF'}); yymmddcc=show_today();
+       date='<b><font size="2" >《'+yymmddcc[0]+'-'+yymmddcc[2]+'-'+yymmddcc[3]+' '+yymmddcc[5]+':'+yymmddcc[6]+':'+yymmddcc[7]+'》</font></b>';
+       document.getElementById("Dd0").innerHTML=date;  }
+   }); SorH2=!SorH2;
+}
+
+$(document).ready(function(){
+  $("#pic1").hover( function(){ clearInterval(tn); } , function(){ t=setInterval( mytime,4500); tn=t; } )
+});
+function mytime(){	 
+     curpno++; if (curpno > Fno){ curpno = 1; }
+		$("#pic1").fadeOut(1000,function()	
+			{
+				$("#pic1").attr("src","../hsusF/photo/"+fodr+"/x"+curpno+".jpg");
+				$("#pic1").fadeIn(500);
+			});
+ }
+</script>
+<table id="tbl0" align="center" width="99%" border="10" cellspacing="1" cellpadding="2" bordercolorlight="pink" bordercolordark="gray" style="margin: 5px 0px 5px 0px;color: #003333; background-color: #FFEEEE; font-family: 標楷體 ;font-size: 14px;font-weight: bold;">
+  <caption style="font-size: 24px; font-weight: bold; color: purple; ">
+      <u>【徐氏十九世辛貴公后歷代子孫在台族譜】</u><br/>
+      <table width="98%" border="0">
+        <tr style="color: red;font-size: 16px;font-weight: bold; border:1px solid black;">
+          <td width="30%">
+          <audio id="ado" controls src="others/mix0.mp3" type="audio/mpeg" autoplay style="float:left;width:100%;height:20px;filter:alpha(opacity=50);opacity:0.50;" ></audio>
+          </td>
+          <td width="35%" align="center">(SINCE 2014)　<span id="dats">製表日：xxxx/xx/xx</span></td>
+          <td width="30%" align="right" id="log_ok"> 來賓，歡迎 您好！！<a href="javascript:$('#log_ok').html('　　');if(SorH1) bt1clk();show_handle('#th01,#tr02,#tf01','#tr01');">【登出】</a></td>
+        </tr>
+      </table>
+  </caption>
+  <colgroup span="2" bgcolor="">    
+    <col/><col/>
+  </colgroup>
+  <colgroup span="3" bgcolor="">
+    <col/><col/><col/>
+  </colgroup>
+  <thead id="th01"> <!-- 表頭 -->
+    <tr style="font-size: 16px; background-color: #BBEEFF;">
+      <th width="26%">阿祖(先)輩(一世～二十一世)</th>
+      <th width="17%">父執輩(二十二世)</th>
+      <th width="20%">這一輩(二十三世)</th>
+      <th width="20%">兒女輩(二十四世)</th>
+      <th width="17%">孫子輩(二十五世)</th>
+    </tr>
+  </thead>
+  <tbody align="left"><!-- 主體 -->
+    <tr id="tr01" style="display:none;font-size: 18px;">
+      <td colspan="1" align="center" width="26%">親 　戚<br>
+      (請&nbsp;登&nbsp;入)<br><br>
+      <font color="pink">【忘記帳密？請聯絡長輩。】</font><hr>
+      <font color="orange">● 請每一房，核對自己的資料，有否錯誤或不足，可透過填寫【與我聯絡】按鍵隨時提供正確資訊。</font>
+      </td>
+      <td colspan="2" align="center" width="37%">
+        <br/><fieldset>
+          <form id="form1" name="form1" method="post">
+          <legend align="center">登入資料</legend>
+            <span id="log_msg" class="red18">　　</span><br/><br/>
+            
+            <font id="xname" class="Fbg18">帳戶名稱：</font>
+            <input type="text"     name="name" id="name" value="" onfocus="$('#xname').removeClass('pdata');" /><br/><br/>            
+            <font id="xpass" class="Fbg18">密　　碼：</font>
+            <input type="password" name="pass" id="pass" value="" autocomplete="off" onfocus="$('#xpass').removeClass('pdata');"/>
+          </form>
+        </fieldset><br/>
+      </td>
+      <td colspan="2" align="center" width="37%">
+            <hr />
+        		<input name="mLomg" id="mLomg" type="hidden" value="" />
+            <input type="reset"  class="red18" value="清除重填" onclick="clears();"/>
+            <input type="button" class="red18" value="確定提交" onclick="memchk('log_msg',0);" />
+            <hr />
+      </td>
+    </tr>
+<!-- ================================================================================================================== -->
+    <tr id="tr02">
+      <!-- --------------------------------------1-------------------------------------- -->
+      <td>
+        <fieldset style=" color: purple;background-color:  #EEEDDD;">
+          <legend align="center">一世 ～ 十八世</legend>
+            (始祖)探玄→元亨→惠常→仲傳→<br/>
+            雙玉→嘉言→學俸→徐河→一梧→<br/>
+            利興→士粹→常政→(長13世)俊恩<br/>
+            →(次14世)倫桂→(長15世)九有<br/>
+            →(長16世)煥文(與孔文合墓、<br/>
+            附九有公墳，在台灣白沙堆)→<br/>
+            (長17世)國漢(墓在台灣)→日璉
+        </fieldset>
+        <br/>(十九世)
+        <fieldset style="background-color:  #BBEEFF;">
+          <legend align="center"><font color="purple">(三子18世)日璉(妻林氏)(生一男)<br/>(墓在台灣痂冬樹下)</font></legend>
+            1.辛貴<br/>　(妻邱氏)(生一男崇喜)<br/>　(以麒貴之子秀喜為嗣)<br/>　(葬在禾尾)
+        </fieldset>
+        <br/>(二十世)
+        <fieldset style="background-color:  #BBEEFF;">
+          <legend align="center">1.辛貴</legend>
+        <fieldset style="background-color: #FFFFCC;">
+          <legend></legend>
+            1.秀喜<br/>　(妻鍾氏)(生四男五女)<br/>　(葬在燕尾山)
+        </fieldset>
+            2.崇喜<br/>　(妻羅氏)<br/>　(早年死無后)
+        </fieldset>
+        <br/>(二十一世)
+        <fieldset style="background-color: #FFFFCC;">
+          <legend align="center">1.秀喜</legend>        
+            1.日暄<br/>　(妻李氏、謝氏)(生二男二女)
+        <fieldset style="background-color: #DDFFAA;">
+          <legend></legend>            
+            2.棠暄<br/>　(妻林氏)(生八男二女)<br/>　(后林氏)(生二男)
+        </fieldset>
+            3.運暄<br/>　(妻林氏)(生三男四女)<br/>　(后鍾氏)(生一男)<br/>
+            4.煥暄<br/>　(妻丘氏)(生一男一女)<br/>
+            5.女兒(二、五、六、八、九妹)
+        </fieldset>
+      </td>
+      <!-- --------------------------------------2-------------------------------------- -->
+      <td>
+        <fieldset style="background-color: #DDFFAA;">
+          <legend align="center">2.棠暄</legend>
+            1.清文
+        <fieldset class="fs2">
+          <legend></legend>            
+            2.恭文<br/>　(妻賴蓮昭)<br/>　(生二男一女)
+        </fieldset>
+            3.寬文<br/>　(妻楊氏)<br/>　(生一男三女)
+        <fieldset class="fs4">
+          <legend></legend>            
+            4.信文(名濟清)<br/>　(妻賴瑞昭)<br/>　(生四男二女)
+        </fieldset>
+            5.敏文<br/>
+            6.惠文<br/>　(妻鍾氏)<br/>　(生二女)<br/>
+            7.錦文<br/>　(妻鍾氏)<br/>　(生二男二女)<br/>
+            8.培文<br/>
+            9.海文<br/>　(妻徐氏)<br/>　(生二男一女)<br/>
+            10.淦文<br/>　(妻肖氏)<br/>　(生一女)<br/>
+            11.二妹(女)<br/>
+            12.信滿(女)
+        </fieldset>
+      </td>
+      <!-- --------------------------------------3-------------------------------------- -->
+      <td valign="top">
+        <br/><br/>
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">2.恭文
+            <span>恭文一家<br/><img src="../hsusF/photo/2014200.gif" /></span>
+          </legend>
+            1.<a class="dropt">滄華(在新營)
+                <span>【(06)635-5989】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:winshow37@gmail.com">(妻王文秀)
+                <span>【(06)635-5989】<br/>winshow37@gmail.com</span><br/>
+              </a>　(生二男)<br/>
+            2.<a class="dropt">淵華(在高雄)
+                <span>【(07)721-1835】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(妻郭春嬌)
+                <span>【092-129-6210】<br/>(07)721-1835</span><br/>
+              </a>　(生一男一女)<br/>
+            3.<a class="dropt" title="">慧華(女)(在台北)
+                <span>【(02)2230-9443】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt" title="">(夫張固宇)
+                <span>【(02)2230-9443】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>　(生二男)
+        </fieldset>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">4.信文(名濟清)
+            <span>信文(濟清)一家<br/><img src="../hsusF/photo/2014400.gif" /></span>
+          </legend>
+            1.<a class="dropt" title="(07)6295537">鑫華(在高雄)<br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:linda22738@yahoo.com.tw">(妻張扶英)
+                <span>【097-248-4351】<br/>(07)629-5537<br/>linda22738@yahoo.com.tw</span><br/>
+              </a>　(生二女)<br/>
+            2.<a class="dropt">仁華(在高雄)
+                <span>【(07)627-1452】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(妻楊華)
+                <span>【(07)627-1452】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>　(生二男一女)<br/>
+        <fieldset class="fs34">
+          <legend></legend>
+            3.<a class="dropt" target="mainFrame" href="mailto:gingerda88@hotmail.com">曼華(女)(在美佛州)
+              <span>【(954)721-6569】<br/>gingerda88@hotmail.com</span><br/>
+              </a>　(生一男一女)<br/>
+            4.<a class="dropt" target="mainFrame" href="mailto:HSUTOK@citywidebanks.com">偉華(女)(在美科州)
+                <span>【0091-720-252-7153】<br/>HSUTOK@citywidebanks.com</span><br/>
+              </a>　(生一女)<br/>
+        </fieldset>
+            5.<a class="dropt" target="mainFrame" href="mailto:u836508@taipower.com.tw">永華(在台北)
+                <span>【093-597-4599】<br/>(02)2230-9061<br/>u836508@taipower.com.tw</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(妻蔡台珍)
+                <span>【093-751-1068】<br/>(02)2230-9061<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>　(生一男)<br/>
+            6.<a class="dropt" target="mainFrame" href="mailto:adnil.hsu@gmail.com">建華(在台南)
+                  <span>【091-249-6135】<br/>(06)214-7140<br/>adnil.hsu@gmail.com</span><br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:hope450615@gmail.com">(妻張月淑)
+                  <span>【091-849-6135】<br/>(06)214-7140<br/>hope450615@gmail.com</span><br/>
+              </a>　(生二男三女)
+        </fieldset>
+      </td>
+      <!-- --------------------------------------4-------------------------------------- -->
+      <td>
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">1.滄華
+            <span>滄華一家<br/><img src="../hsusF/photo/2014210.gif" /></span>
+          </legend>        
+            1.<a class="dropt">亞琛(在台中)
+                <span>【(04)2406-9541】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:christine@tankong.com">(妻林筱婷)
+                <span>【(04)2406-9541】<br/>christine@tankong.com</span>
+              </a>(生二女)<br/>
+            2.<a class="dropt" title="(08)9329117">世琛(在台東)<br/>
+              </a>&nbsp;
+              <a class="dropt">(妻涂瓊惠)
+                <span>【(08)932-9117】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>(生一女)
+        </fieldset>
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">2.淵華
+            <span>淵華一家<br/><img src="../hsusF/photo/2014220.gif" /></span>
+          </legend>
+            1.<a class="dropt" target="mainFrame" href="mailto:pat6817@yahoo.com.tw">珮琦(女)(在高雄)
+                <span>【(07)721-1835】<br/>pat6817@yahoo.com.tw</span><br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:achang0224@yahoo.com.tw">(夫康明璋)
+                <span>【(07)721-1835】<br/>achang0224@yahoo.com.tw</span><br/>
+              </a>
+            2.<a class="dropt" target="mainFrame" href="mailto:t0211959@seed.net.tw">宇琛(在高雄)
+                <span>【(07)721-1835】<br/>t0211959@seed.net.tw</span>
+              </a>
+        </fieldset>
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">3.慧華(女)
+            <span>慧華一家<br/><img src="../hsusF/photo/20142002.jpg" /></span>
+          </legend>
+            1.<a class="dropt">張兆立(在台北)
+                <span>【(02)2230-9443】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>
+            2.<a class="dropt">張旭立(在台北)
+                <span>【(02)2230-9443】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>
+        </fieldset>
+        <br/>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">1.鑫華
+            <span>鑫華一家<br/><img src="../hsusF/photo/076295537.gif" /></span>
+          </legend>
+            1.<a class="dropt">立彥(女)(在台南)
+                <span>【092-159-7160】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(夫張家章)
+                <span>【092-159-7180】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>(生二女)<br/>
+            2.<a class="drop" target="mainFrame" href="mailto:vin102468@gmail.com">立美(女)(在台南)
+                <span>立美一家【092-022-0210】<br/>vin102468@gmail.com<br/><img src="../hsusF/photo/0920220210.gif" /></span><br/>
+              </a>&nbsp;
+              <a class="dropt" target="mainFrame" href="mailto:vin102468@gmail.com">(夫許文俊)
+                <span>【092-063-3400】<br/>vin102468@gmail.com</span>
+              </a>
+        </fieldset>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">2.仁華
+            <span>仁華一家<br/><img src="../hsusF/photo/201401.jpg" /></span>
+          </legend>
+            1.<a class="dropt">立威(名士翔)(在高雄)
+                <span>【(07)627-1452】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>　(生一男一女)<br/>
+            2.<a class="dropt" target="mainFrame" href="mailto:chinbow@gmail.com">立潔(女)(在高雄)
+                <span>【(07)624-1357】<br/>chinbow@gmail.com</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(夫廖炳森)
+                <span>【(07)624-1357】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>(生一男)<br/>
+            3.<a class="dropt">立凱(名煥凱)(在高雄)
+                <span>【(07)627-1452】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>&nbsp;
+              <a class="dropt">(妻林璧玲)
+                <span>【(07)627-1452】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>(生二男)<br/> 
+        </fieldset>
+        <fieldset class="fs34">
+          <legend class="dropt" align="center">3.曼華(女)
+            <span>曼華一家<br/><img src="../hsusF/photo/201408.jpg" /></span>
+          </legend>
+            1.<a class="dropt" title="">史立維(在美)
+                <span>【(954)721-6569】<br/>xxxx@xxxx.xxx.xx</span><br/>
+              </a>
+            2.<a class="drop">史立平(女)(在美)
+                <span>立平一家【(954)721-6569】<br/>xxxx@xxxx.xxx.xx<br/><img src="../hsusF/photo/201443b.jpg" /></span><br/>
+              </a>&nbsp;
+              <a class="dropt">(夫鮑傑夫)
+                <span>【(954)721-6569】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>
+        </fieldset>        
+        <fieldset class="fs34">
+          <legend class="dropt" align="center">4.偉華(女)
+            <span>偉華一家<br/><img src="../hsusF/photo/201409.gif" /></span>
+          </legend>
+            1.<a class="dropt">卓碧清(女)(在美)
+                <span>【0091-720-252-7153】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>
+        </fieldset>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">5.永華
+            <span>永華一家<br/><img src="../hsusF/photo/0935974599.gif" /></span>
+          </legend>
+            1.<a class="drop" target="mainFrame">立宇(名立倫)(在桃園)
+                <span>立宇(立倫)一家【(03)381-9080】<br/>【091-376-3892】<br/>@xxxx.xxx.xx<br/>
+                <img src="../hsusF/photo/0913763892.jpg" /></span><br/>
+              </a>&nbsp;
+              <a class="dropt">(妻黃筱佾)
+                <span>【091-123-8720】<br/>xxxx@xxxx.xxx.xx</span>
+              </a>
+        </fieldset>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">6.建華
+            <span>建華一家<br/><img src="../hsusF/photo/0912496135.gif" /></span>
+          </legend>
+            1.<a class="dropt" target="mainFrame" href="mailto:martin.19811104@gmail.com">立豪(在菲律賓)
+                <span>【098-238-1104】<br/>(06)252-7140<br/>martin.19811104@gmail.com</span><br/>
+              </a>
+            2.<a class="dropt" target="mainFrame" href="mailto:alice910265@gmail.com">立玲(女)(在高雄)
+                <span>【097-027-0127】<br/>(06)252-7140<br/>alice910265@gmail.com</span><br/>
+              </a>
+            3.<a class="dropt" target="mainFrame" href="mailto:martin998855@yahoo.com.tw">立凡(在高雄)
+                <span>【092-154-9604】<br/>(06)252-7140<br/>martin998855@yahoo.com.tw</span><br/>
+              </a>
+            4.<a class="dropt" target="mainFrame" href="mailto:lily85513@gmail.com">立奇(女)(在台北)
+                <span>【098-170-3161】<br/>(06)252-7140<br/>lily85513@gmail.com</span><br/>
+              </a>
+            5.<a class="dropt" target="mainFrame" href="mailto:t851221@gmail.com">立昀(女)(在台中)
+                <span>【092-049-6135】<br/>(06)252-7140<br/>t851221@gmail.com</span>
+              </a>
+        </fieldset>
+      </td>
+      <!-- --------------------------------------5-------------------------------------- -->
+      <td valign="top">
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">1.亞琛
+            <span>亞琛一家<br/><img src="../hsusF/photo/2014211.jpg" /></span>
+          </legend>
+            1.顥瑄(女)<br/>
+            2.顥瑋(女)
+        </fieldset>
+        <fieldset class="fs2">
+          <legend class="dropt" align="center">2.世琛
+            <span>世琛一家<br/><img src="../hsusF/photo/2014212.jpg" /></span>
+          </legend>
+            1.顥榕(女)
+        </fieldset>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">1.立彥(女)
+            <span>立彥一家<br/><img src="../hsusF/photo/201413.jpg" /></span>
+          </legend>
+            1.張宸琳(女)<br/>
+            2.張瑜君(女)
+        </fieldset>
+        <br/><br/>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">1.立威(名士翔)
+            <span>立威(士翔)一家<br/><img src="../hsusF/photo/076271450.gif" /></span>
+          </legend>
+            1.珮軒(女)<br/>
+            2.培原
+        </fieldset>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">2.立潔(女)
+            <span>立潔一家<br/><img src="../hsusF/photo/076241357.gif" /></span>
+          </legend>
+            1.廖震竤
+        </fieldset>
+        <fieldset class="fs4">
+          <legend class="dropt" align="center">3.立凱(名煥凱)
+            <span>立凱(煥凱)一家<br/><img src="../hsusF/photo/076271452.jpg" /></span>
+          </legend>
+            1.璿覲<br/>
+            2.啓祐
+        </fieldset>
+      </td>
+      <!-- ------------------------------------------------------------------------------>
+    </tr>
+  </tbody>
+  <tfoot id="tf01"> <!-- 表尾 -->
+    <tr style="font-size: 14px;font-family:標楷體;color: darkred;" bgcolor="#DEDDED">
+      <td align="left" colspan="4">曆年聚會(餐)影(照)片：
+        <input type="button" id="bi1_2014/07" class="bi" value="2014/07" onclick="bt1clk(this);"     style="font-family:標楷體;" />
+        <input type="button" id="bt3_2015/02" class="bt" value="2015/02" onclick="popup(this,'2');"  style="font-family:標楷體;" />
+        <input type="button" id="bi2_2016/01" class="bi" value="2016/01" onclick="bt1clk(this);"     style="font-family:標楷體;" />
+        <input type="button" id="bt5_2017/02" class="bt" value="2017/02" onclick="popup(this,'10');" style="font-family:標楷體;" />
+        <input type="button" id="bt6_2018/03" class="bt" value="2018/03" onclick="popup(this,'2');"  style="font-family:標楷體;" />
+        <div id="apDiv1" align="center">
+          <iframe id="u1bsw" src="https://www.youtube.com/embed/Sp_KRuipmOE?rel=0&amp;enablejsapi=1&html5=1" style="display:none;width:700px;height:450px;border:1px solid #FF8080;box-shadow:10px 10px 10px orange;z-index:5;" allowfullscreen ></iframe>
+          <iframe id="u2bsw" src="https://www.youtube.com/embed/b13nZoxj_04?rel=0&amp;enablejsapi=1&html5=1" style="display:none;width:700px;height:450px;border:1px solid #FF8080;box-shadow:10px 10px 10px orange;z-index:5;" allowfullscreen ></iframe>
+          <!--<img id="pic1" src="" style="display:none;width:765px;height:450px;border:1px solid #CF0;box-shadow:10px 10px 10px orange;z-index:7;" title="(游標置於此時,不換頁面)"/>-->
+        </div>
+        <div id="apDiv2" align="center">
+          <img id="pic1" src="" style="width:650px;height:400px;border:1px solid #CF0;box-shadow:10px 10px 10px orange;z-index:6;" title="(游標置於此時,不換頁面)"/>
+        </div>
+        <div id="divFT" style="display:none;position:fixed;z-index:9;top:32%;right:11%; width:580px; border: 4px double orange;background-color:#004000;" >
+            <script type="text/javascript">$('#divFT').load('contactme.htm');</script>
+        </div>  
+      </td>
+      <td align="right">
+        <input type="button" id="bt2" class="bt" value="與我聯絡" onclick="bt2clk();" style="font-family:標楷體;" />
+      </td>
+    </tr> 
+    <tr style="font-size: 14px;color: purple;" bgcolor="#DEDDED">
+      <td colspan="4" align="left">
+      備註：●<font color="blue" style="background-color:gold ;">金黃(gold)底藍(blue)字</font>：表示在台灣。&nbsp;　&nbsp;
+      　　<font color="darkred" style="background-color:pink ;">粉紅(pink)底暗紅(darkred)字</font>：表示在美國。<br/>
+      &nbsp;　　&nbsp;●命名中得取一字以表其同一之輩數(世)名。例：20(喜)、21(暄)、22(文)、23(華)、24(琛/立)、25(?)、26(?)、27(?)、28(?)。<br/>
+      &nbsp;　　&nbsp;●為使家族各(支)房能開枝散葉繁衍興旺，以免家道中落無后，得以下列方式為之載入族譜。<br/>
+      &nbsp;　　　&nbsp;1.同輩子女過繼為嗣者。 2.男到女方落戶(入贅)者。 3.嫁出女兒之子女從母姓者。 4.領養之子女者。<br/>
+      &nbsp;　　&nbsp;●為使家族各(支)房親戚相互熟識互動，擬每年至少舉辦一次宗親家族聚會(餐)為原則，時間地點另訂後擇期通知。<br/>
+      </td>
+      <td>
+      <div class="imgsw" align="center">祖宗十八代 / 親戚關係圖<br/>
+          <img src="photo/Relationr.jpg" style="width:75px; height:55px; border:1px solid darkblue;"/>
+          <img src="photo/Relations.jpg" style="width:75px; height:55px; border:1px solid darkblue;"/>
+          <span><img src="photo/Relation.jpg" /></span>
+      </div>
+      </td>      
+    </tr>
+    <tr style="font-size: 14px;color: purple;" bgcolor="#DEDDED">
+      <td colspan="5" align="left">
+      參考：●大陸老家(廣東省梅州市蕉岭县蕉城镇湖谷村谷仓下新屋队)的位置地圖如下。<br/>
+      <div align="center">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14505.348064992164!2d116.1675619204922!3d24.646525376335614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3410ce9a4406dbd7%3A0x258511aef6e6d7a0!2z5Lit5ZyL5buj5p2x55yB5qKF5bee5biC6JWJ5ba657ij56mA5YCJ5LiL!5e0!3m2!1szh-TW!2stw!4v1440502067587" width="48%" height="340" style="border:2px solid darkred;box-shadow: 10px 10px 10px gray;" allowfullscreen></iframe>
+      &nbsp;<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d896.9252250296571!2d116.16389136369204!3d24.640340282513424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-TW!2stw!4v1440502449939" width="48%" height="340" style="border:2px solid darkred;box-shadow: 10px 10px 10px gray;" allowfullscreen></iframe>
+      </div>
+      &nbsp;　　&nbsp;●走遍中国 养生福地【蕉岭】：長寿“老人国”　　　　　  　　　　　　　　　　　　&nbsp;　&nbsp;●【客家天下】- 5集電視紀錄片</span>
+      <div align="center">
+      <iframe width="48%" height="350" src="https://www.youtube.com/embed/F6B_daoLEw4" style="border:2px solid darkred;box-shadow: 10px 10px 10px gray;" allowfullscreen></iframe>
+      &nbsp;<iframe width="48%" height="350" src="https://www.youtube.com/embed/videoseries?list=PLMuo5VI9qYiE13Qeuku2oGmKkJYAQIpzn" style="border:2px solid darkred;box-shadow: 10px 10px 10px gray;" allowfullscreen></iframe>
+      <iframe width="98%" height="350" src="http://www.twbest1.com/" style="border:2px solid darkred;box-shadow: 10px 10px 10px gray;" allowfullscreen></iframe>
+      </div>
+      <!--<input type="button" class="red18" value="2015宗親家族聚會合照" onclick="popup();" />-->
+      </td>     
+    </tr>    
+  </tfoot>
+</table>
+<!-- --------------------------------------------------------------------------------------------------- -->

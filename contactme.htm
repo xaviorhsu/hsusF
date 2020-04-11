@@ -1,0 +1,154 @@
+<!-- TemplateBeginEditable -->
+<div align="center" style="width:100%; color: yellow;" >
+        <p class="pageName style40">
+        <span class="cosp1">請留下您的問題或增修(選項打勾)個人資料，我們將盡速處理，謝謝。</span>
+        <span class="cosp2">請預覽與檢核您輸入的資料，謝謝。</span>
+        </p>
+        <hr size="2" style="color:orange;" noshade="noshade" />
+        <form id="form2" name="form2" method="post" onsubmit="return sendmail();"  >
+<table width="100%" align="right" border="0" >		
+          <tbody id="tby" align="left">
+            <tr>
+              <td width="35%" align="center" height="23"><font id="xnam2" class="Fbg16">姓　名：</font>
+                <span class="cosp1"><input name="nam2" id="nam2" type="text" value="" size="10" onfocus="$('#xnam2').removeClass('pdata');" /></span>
+              </td>
+              <td width="10%" align="right"><font id="xrank" class="Fbg16">輩份：</font></td>
+              <td colspan="2" align="right">
+                <span class="cosp1"><input name="rank" id="rank" type="text" value="" size="3" onfocus="$('#xrank').removeClass('pdata');" /></span>
+                <font class="Fbg16">世(代)</font>
+                <span id="Dd0"></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" height="23">&nbsp;
+                <select name="item" id="item" class="Fbg_16" onclick="chgitm(this);" >
+                  <option value="1">問題內容：</option>
+                  <option value="2">相片上傳：</option>
+                </select> </td>              
+              <td width="21%" title="XXX-XXX-XXXX"><input type="checkbox" value="1" /><font id="xcellphone" class="Fbg16">連絡手機：</font></td>
+              <td width="34%">
+                <span class="cosp1"><input name="cellphone" id="cellphone" type="text" size="22" value="" onfocus="$('#xcellphone').removeClass('pdata');"/></span>
+              </td>
+            </tr>            
+            <tr>
+              <td colspan="2" rowspan="4" valign="top">
+                <div class="cosptt">             
+                <span><textarea name="tt" id="tt" style=" width: 100%; height: 105px;" ></textarea></span>
+                </div>
+                <div class="cospic">
+                <!--<form id="form3" name="form3" method="post" enctype="multipart/form-data" >-->
+                    <p align="center" id="fmsg1" style="display: none;border: 1px solid pink;margin:  3px 0 3px 0;font-family:標楷體;" >
+                    </p>
+                    <p align="center" id="fmsg0" style="border: 1px solid pink;margin: 3px 0 3px 0;font-family:標楷體;" >
+                    <label for="photos">&nbsp;選填相片檔名(.jpg):</label><br /><br />
+                    <input type="file" name="photos[]" id="photos" class="photos" value="" /><br /><br />
+                    <!--1:<input type="file" name="photos[]" id="photos" class="photos" value="" /><br />
+                    2:<input type="file" name="photos[]" class="photos" value="" /><br />
+                    3:<input type="file" name="photos[]" class="photos" value="" /><br />-->
+                      <input type="button" value="相片上傳" id="btn3" style="cursor:pointer;" onclick="upload('photos');" />&nbsp;..
+                      <input type="button" value="清除重選" id="rst3" style="cursor:pointer;" onclick="$('#btn3').val('相片上傳');$('.photos').val('');"  />
+                    </p>
+                <!--</form>--><!---->
+                </div>
+              </td>
+              <td height="23" title="(XX)XXXX-XXXX"><input type="checkbox" value="2" /><font id="xtelephone" class="Fbg16">連絡市話：</font></td>
+              <td>
+                <span class="cosp1"><input name="telephone" id="telephone" type="tel" size="22" value="" onfocus="$('#xtelephone').removeClass('pdata');"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td height="23" title="XXXX@XXXX.XXX.XX"><input type="checkbox" value="3" /><font id="xcellphon2" class="Fbg16">【LINE】：</font></td>
+              <td>
+                <span class="cosp1"><input name="cellphon2" id="cellphon2" type="text" size="22" maxlength="40" value="" onfocus="$('#xcellphon2').removeClass('pdata');"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td height="23" title="XXXX@XXXX.XXX.XX"><input type="checkbox" value="4" /><font id="xemail" class="Fbg16">電子信箱：</font></td>
+              <td>
+                <span class="cosp1"><input name="email" id="email" type="email" size="22" maxlength="40" value="" onfocus="$('#xemail').removeClass('pdata');"/></span>
+              </td>
+            </tr>
+            <tr>
+              <td height="23" title="XXXX@XXXX.XXX.XX"><input type="checkbox" value="5" /><font id="xemai2" class="Fbg16">【ＦＢ】：</font></td>
+              <td>
+                <span class="cosp1"><input name="emai2" id="emai2" type="email" size="22" maxlength="40" value="" onfocus="$('#xemai2').removeClass('pdata');"/></span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td height="23" colspan="4">
+              <hr size="2" style="color:orange;" noshade="noshade" />
+              <p align="center">
+				        <span class="cossub">
+                <input type="submit" value="送出" name="send" id="sub" style="cursor:pointer;" />&nbsp;..
+                <input type="reset"  value="清除" name="reset" style="cursor:pointer;"/>
+                </span>
+              </p></td>
+            </tr>
+          </tfoot>
+</table>
+      </form>
+</div>
+<!-- TemplateEndEditable -->
+<script type="text/javascript" charset="utf-8">
+jQuery('document').ready(function(){
+      $(':file').change(function(){
+          //var filelist = this.files;                           /* now you can work with the file list */
+          //var numFiles = filelist.length;
+          var file = this.files[0];
+          var name = file.name;
+          var size = file.size;
+          var type = file.type;
+          //Your validation          alert(name+" <=> "+type+" <=> "+size);
+          var omsg="";  var imageType = /image.*/; var imagesize = 3145728 ;  // 512k bytes  =524288 / 3M=3145728
+          if (!type.match(imageType)) { omsg += "不是相片檔！"; }
+          if (size > imagesize) { omsg += "檔案太大(>3,072K)！"; }
+          if (omsg!="") { alert("檔案"+name+"\n"+omsg+"\n【請重選！】"); $('#photos').val(''); }
+      });
+});
+
+function chgitm(itm){
+  if($(itm).val()=='1') { $('#photos').val('');$('#fmsg1').html('');show_handle('#fmsg1,.cospic','#fmsg0,.cosptt');$('.cossub').show(); }
+  else                  { $('#tt').val('');show_handle('.cosptt','.cospic');$('.cossub').hide(); }
+}
+
+function upload(id){
+  if($("."+id).val()!="") {
+  $('#btn3').val('上傳中..');
+  var upfile   = $("#"+id)[0].files[0];                            // Get the selected files from the input.
+  var formData = new FormData();                                   // Create a FormData (instance) object.
+  formData.append(id,upfile);    //alert(formData);                // Add the file to the request. The form with the file inputs.
+  var url     = "http://"+HTTP_IP+"php/hgp_Ajax.php?opt=upl_fil&fn="+id;               //no padding (use callback())
+          $('#fmsg1').show();$('#fmsg0').hide();
+          //callAjaxDo("fmsg1","f",url,formData);
+          callAjaxDo("fmsg1","u",url,formData);
+          $('#btn3').val('相片上傳');
+  }
+  else alert("【未選相片檔案！】");
+}
+
+function sendmail(){
+  var chksI=["xnam2","xrank"];  result1=chk_form("0",chksI);      //alert(result1);
+  if(result1) {
+  var chksI=["xnam2","xrank"];  var items=["","xcellphone","xtelephone","xcellphon2","xemail","xemai2"];
+  var k=0;  $(':checkbox:checked').each(function(i) {chksI.push(items[$(this).val()]);k++;}  );
+  if (k||($("#tt").val()||$("#photos").val()))   result2=chk_form("0",chksI);
+  else   { result2="";  alert("【未提問/上傳、個人資料增修選項亦未打勾】"); }
+  if(result2) {
+          mk_able(0,"sub");
+      switm=($("#item").val()==2)?$("#fmsg1").html():$("#tt").val();
+      var options = "opt=snd_mal"+"&Dd0="+$("#Dd0 font").text()+result2.substr(2,result2.length-3)+"&item="+$("#item").val()+"&tt="+encodeURIComponent(switm);
+      //var options = "opt=snd_mal"+"&Dd0="+$("#Dd0 font").text()+"&"+$("#form2").serialize();      alert(options);
+      var url     = "http://www.catholic.org.tw/tncath/php/hgp_Ajax.php?js_cb=?";
+      //var url     = "http://"+HTTP_IP+"php/hgp_Ajax.php?js_cb=?";
+          callAjaxDo("","s",url,options);
+          mk_able(1,"sub");             //data_handle(0);
+          $(':checkbox:checked').prop('checked',false);
+          $("#tby span :input").val("");           bt2clk();
+          $('.cossub').show();
+          
+  } }
+  return false; 
+}
+</script>
