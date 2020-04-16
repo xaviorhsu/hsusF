@@ -49,9 +49,8 @@
 #menu9 li a:active,#menu9 li a:hover {text-decoration: underline;color: #003333;background-color: #CCFFFF; border: solid 2px purple; box-shadow:8px -8px 8px gray; }
 </style>
 <script type="text/javascript" charset="utf-8">
-  
-$(document).ready(function()  {
-  var nophp = 1; var flag=0;
+var nophp = 1; var flag=1;  
+$(document).ready(function()  {  
 $('#li_0,#li_1,#li_2,#li_3,#li_4').click(function() {
   $('#div0,#div1,#div2,#div3,#div4').css('display','none');
   $("#menu9 li,#menu9 li a").css('background-color',''); $(this).css('background-color','#CCFFFF');
