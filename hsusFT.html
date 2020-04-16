@@ -50,7 +50,7 @@ function data_handle(n)   {
               else  $("#s"+$(this).val()).html("　");
              });
 }
-function memchk(id)      {  
+function memchk(id,sw)      {  
   $("#"+id).html("　　"); //empty content
   if(confirm("確定送出？"))
     {
@@ -75,8 +75,8 @@ function memchk(id)      {
                     }
               setoutmsg(id,info);
                } 
-          else {  //var url = "http://"+HTTP_IP+"php/hgp_Ajax.php";
-                  var url = "http://"+HTTP_IP+"php/hgp_Ajax.php?js_cb=?";
+          else {  //var url = HTTP_IP+"php/hgp_Ajax.php";
+                  var url = HTTP_IP+"php/hgp_Ajax.php?js_cb=?";
                   callAjaxDo(id,'s',url,options);
                }               
         }       
