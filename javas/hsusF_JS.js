@@ -821,7 +821,7 @@ function chk_act_pws(atps){
             var date=show_today(); $("#dats").text("製表日："+date[0]+"/"+date[2]+"/"+date[3]);
             outmsg=(outmsg=="guestVIP")?"貴賓":outmsg;
             document.getElementById("nam2").value = outmsg;
-            var outmsg = outmsg+"，歡迎 您好！！<a href=\"javascript:$('#log_ok').html('　　');if(SorH1) bt1clk();show_handle('#th01,#tr02,#tf01','#tr01');\">【登出】</a>";
+            var outmsg = outmsg+"，歡迎 您好！！<a href=\"javascript:$('#log_ok').html('');show_handle('#th01,#tr02,#tf01','#tr01');\">【登出】</a>";
             document.getElementById("log_ok").innerHTML = outmsg;
             document.getElementById("name").value = ""; document.getElementById("pass").value = "";
             $("#tr01").hide(); $("#th01,#tr02,#tf01").show();
